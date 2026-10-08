@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ClipForge AI — Auto Video Clipper</title>
+<style>
+:root{--bg:#060812;--panel:rgba(15,20,38,.78);--line:rgba(130,150,255,.18);--text:#eef2ff;--muted:#8d96b5;--a:#7c5cff;--b:#00d9ff;--good:#37e6a1}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0%,#18205a 0,#060812 38%),radial-gradient(circle at 90% 80%,#082d3d 0,#060812 35%);color:var(--text);font-family:Inter,system-ui,Arial,sans-serif;min-height:100vh}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,black,transparent)}
+.wrap{width:min(1180px,92%);margin:auto;padding:34px 0 60px}.brand{display:flex;align-items:center;gap:13px}.logo{width:45px;height:45px;border-radius:14px;background:linear-gradient(135deg,var(--a),var(--b));box-shadow:0 0 35px #6655ff66;display:grid;place-items:center;font-size:22px;font-weight:900}.brand b{font-size:20px}.brand span{display:block;color:var(--muted);font-size:12px;margin-top:2px}.hero{text-align:center;padding:55px 0 30px}.badge{display:inline-flex;padding:7px 12px;border:1px solid var(--line);background:#10152a99;border-radius:99px;color:#aeb7ff;font-size:12px}.hero h1{font-size:clamp(38px,7vw,76px);line-height:.95;margin:20px 0 14px;letter-spacing:-3px;background:linear-gradient(90deg,#fff,#a8a2ff,#63eaff);-webkit-background-clip:text;color:transparent}.hero p{color:var(--muted);max-width:680px;margin:auto;line-height:1.6}.panel{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:0 25px 80px #0008;backdrop-filter:blur(18px)}.drop{border:1.5px dashed #6370b966;border-radius:20px;padding:42px 20px;text-align:center;cursor:pointer;transition:.2s}.drop:hover,.drop.over{border-color:#7d72ff;background:#7c5cff0c}.drop .icon{font-size:40px}.drop h3{margin:12px 0 5px}.drop p{color:var(--muted);font-size:13px;margin:0}.controls{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:12px;margin-top:16px}.field{background:#0a0e1c;border:1px solid var(--line);padding:12px;border-radius:14px}.field label{display:block;color:var(--muted);font-size:11px;margin-bottom:7px}.field select,.field input{width:100%;background:transparent;border:0;color:white;outline:0;font-size:14px}.field select option{background:#101427}.btn{border:0;border-radius:14px;padding:14px 18px;font-weight:800;cursor:pointer;color:white;background:linear-gradient(135deg,var(--a),#4c9cff);box-shadow:0 10px 30px #6655ff33}.btn:disabled{opacity:.45;cursor:not-allowed}.actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}.btn.secondary{background:#12182b;border:1px solid var(--line);box-shadow:none}.status{margin-top:18px;display:none}.status.show{display:block}.bar{height:8px;background:#0a0e1b;border-radius:99px;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,var(--a),var(--b));transition:.2s}.statusline{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin:8px 0}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:18px}.clip{background:#0a0e1a;border:1px solid var(--line);border-radius:17px;overflow:hidden}.clip video{width:100%;display:block;aspect-ratio:16/9;background:#000}.clip .info{padding:12px}.clip .name{font-weight:700;font-size:13px}.clip .meta{color:var(--muted);font-size:11px;margin:5px 0 10px}.clip a{display:block;text-align:center;text-decoration:none;color:white;background:#171e35;border:1px solid var(--line);padding:9px;border-radius:10px;font-size:12px;font-weight:700}.notice{margin-top:15px;color:#9099b7;font-size:11px;line-height:1.6}.footer{text-align:center;color:#66708f;font-size:11px;margin-top:30px}
+@media(max-width:800px){.controls{grid-template-columns:1fr 1fr}.hero{padding-top:35px}}@media(max-width:520px){.controls{grid-template-columns:1fr}.panel{padding:15px}.wrap{width:94%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="brand"><div class="logo">✦</div><div><b>CLIPFORGE</b><span>LOCAL VIDEO LAB · 100% CLIENT-SIDE</span></div></header>
+<section class="hero"><div class="badge">⚡ NO UPLOAD SERVER · VIDEO STAYS IN YOUR BROWSER</div><h1>Long Video → Viral Clips</h1><p>Potong video panjang menjadi banyak clip pendek langsung dari browser. Cocok untuk Shorts, TikTok, Reels, podcast, gameplay, dan konten panjang.</p></section>
+
+<section class="panel">
+<div class="drop" id="drop"><div class="icon">🎬</div><h3 id="dropTitle">Pilih atau drop video di sini</h3><p>MP4 / MOV / WebM · Video diproses lokal di perangkatmu</p><input id="file" type="file" accept="video/*" hidden></div>
+<div class="controls">
+<div class="field"><label>MODE CLIP</label><select id="mode"><option value="sequential">Sequential — potong berurutan</option><option value="sample">Smart Sample — sebar sepanjang video</option></select></div>
+<div class="field"><label>DURASI CLIP</label><select id="duration"><option value="15">15 detik</option><option value="30" selected>30 detik</option><option value="45">45 detik</option><option value="60">60 detik</option></select></div>
+<div class="field"><label>JUMLAH CLIP</label><input id="count" type="number" min="1" max="30" value="10"></div>
+<div class="field"><label>FORMAT</label><select id="format"><option value="mp4">MP4</option><option value="webm">WEBM</option></select></div>
+</div>
+<div class="actions"><button class="btn" id="start" disabled>✦ GENERATE CLIPS</button><button class="btn secondary" id="downloadAll" disabled>⇩ DOWNLOAD SEMUA</button><button class="btn secondary" id="clear">RESET</button></div>
+<div class="status" id="status"><div class="statusline"><span id="statusText">Menyiapkan...</span><span id="percent">0%</span></div><div class="bar"><div class="fill" id="fill"></div></div></div>
+<div class="grid" id="grid"></div>
+<div class="notice">Catatan: versi gratis ini tidak memakai AI speech/vision untuk menentukan “bagian paling menarik”. Mode Smart Sample memilih bagian yang tersebar di seluruh video. Untuk video beberapa jam, proses sangat bergantung pada RAM, CPU, browser, dan ruang penyimpanan perangkat.</div>
+</section>
+<div class="footer">CLIPFORGE · GitHub Pages ready · No backend required</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.2/dist/umd/index.js"></script>
+<script>
+const {FFmpeg}=FFmpegWASM, {fetchFile,toBlobURL}=FFmpegUtil;
+const ff=new FFmpeg();
+let source=null, clips=[], loaded=false;
+const $=id=>document.getElementById(id);
+const drop=$('drop'), file=$('file'), start=$('start'), grid=$('grid'), status=$('status'), fill=$('fill'), statusText=$('statusText'), percent=$('percent'), downloadAll=$('downloadAll');
+
+drop.onclick=()=>file.click();
+drop.ondragover=e=>{e.preventDefault();drop.classList.add('over')};
+drop.ondragleave=()=>drop.classList.remove('over');
+drop.ondrop=e=>{e.preventDefault();drop.classList.remove('over'); if(e.dataTransfer.files[0]) choose(e.dataTransfer.files[0])};
+file.onchange=e=>e.target.files[0]&&choose(e.target.files[0]);
+
+async function choose(f){
+ if(!f.type.startsWith('video/')) return alert('Pilih file video.');
+ source=f; $('dropTitle').textContent=f.name; start.disabled=false;
+ grid.innerHTML=''; clips=[]; downloadAll.disabled=true;
+}
+async function loadFF(){
+ if(loaded)return;
+ status.classList.add('show'); statusText.textContent='Memuat video engine pertama kali...';
+ const base='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd';
+ await ff.load({coreURL:await toBlobURL(base+'/ffmpeg-core.js','text/javascript'),wasmURL:await toBlobURL(base+'/ffmpeg-core.wasm','application/wasm')});
+ loaded=true;
+}
+function setProgress(p,t){p=Math.max(0,Math.min(100,p));fill.style.width=p+'%';percent.textContent=Math.round(p)+'%';statusText.textContent=t}
+function fmt(s){s=Math.round(s);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+async function getDuration(url){
+ return new Promise((res,rej)=>{const v=document.createElement('video');v.preload='metadata';v.onloadedmetadata=()=>res(v.duration);v.onerror=rej;v.src=url});
+}
+async function generate(){
+ if(!source)return;
+ start.disabled=true; grid.innerHTML=''; clips=[]; downloadAll.disabled=true;
+ try{
+  await loadFF();
+  const input='source.'+(source.name.split('.').pop()||'mp4');
+  setProgress(3,'Membaca video...');
+  await ff.writeFile(input,await fetchFile(source));
+  const dur=await getDuration(URL.createObjectURL(source));
+  const len=+$('duration').value, count=Math.min(30,+$('count').value||10), mode=$('mode').value, ext=$('format').value;
+  let starts=[];
+  if(mode==='sequential'){
+    for(let i=0;i<count && i*len<dur;i++) starts.push(i*len);
+  }else{
+    const maxStart=Math.max(0,dur-len);
+    for(let i=0;i<count;i++) starts.push(count===1?maxStart/2:(maxStart*i/(count-1)));
+  }
+  for(let i=0;i<starts.length;i++){
+    const out=`clip_${String(i+1).padStart(2,'0')}.${ext}`;
+    setProgress(5+(i/starts.length)*90,`Generating clip ${i+1}/${starts.length} · ${fmt(starts[i])}`);
+    if(ext==='mp4'){
+      await ff.exec(['-ss',String(starts[i]),'-i',input,'-t',String(Math.min(len,dur-starts[i])),'-map','0:v:0?','-map','0:a:0?','-c:v','libx264','-preset','veryfast','-crf','23','-c:a','aac','-b:a','128k','-movflags','+faststart','-y',out]);
+    }else{
+      await ff.exec(['-ss',String(starts[i]),'-i',input,'-t',String(Math.min(len,dur-starts[i])),'-map','0:v:0?','-map','0:a:0?','-c:v','libvpx','-crf','32','-b:v','0','-c:a','libvorbis','-y',out]);
+    }
+    const data=await ff.readFile(out);
+    const blob=new Blob([data.buffer],{type:ext==='mp4'?'video/mp4':'video/webm'});
+    const url=URL.createObjectURL(blob); clips.push({url,name:out,blob});
+    const card=document.createElement('div');card.className='clip';
+    card.innerHTML=`<video controls preload="metadata" src="${url}"></video><div class="info"><div class="name">${out}</div><div class="meta">Start ${fmt(starts[i])} · ${fmt(Math.min(len,dur-starts[i]))}</div><a href="${url}" download="${out}">⇩ Download clip</a></div>`;
+    grid.appendChild(card);
+    try{await ff.deleteFile(out)}catch{}
+  }
+  setProgress(100,`Selesai · ${clips.length} clip`);
+  downloadAll.disabled=clips.length===0;
+ }catch(e){console.error(e);setProgress(0,'Gagal: '+(e.message||e));alert('Proses gagal. Coba video MP4/H.264 yang lebih ringan atau browser lain.')}
+ finally{start.disabled=false}
+}
+start.onclick=generate;
+downloadAll.onclick=async()=>{
+ if(!clips.length)return;
+ for(const c of clips){const a=document.createElement('a');a.href=c.url;a.download=c.name;a.click();await new Promise(r=>setTimeout(r,250))}
+};
+$('clear').onclick=()=>location.reload();
+</script>
+</body>
+</html>
